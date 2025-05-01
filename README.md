@@ -18,7 +18,7 @@ Once you have installed Git and Github desktop, we can set up the repository on 
 
 ### Windows
 
-To set up the repository, start by navigating to the directory where Celeste is installed. This can be done either through Steam or Olympus. Once you're in the directory (which should end in `Steam/steamapps/common/Celeste/`), look for the `Mods` folder.  Right click on it and press *Open in Terminal*.  This should open a command line for you.  Now, you'll want to type in the following command:
+To set up the repository, start by navigating to the directory where Celeste is installed. This can be done either through Steam or Olympus. Once you're in the directory (which should end in `Steam/steamapps/common/Celeste/`), look for the `Mods` folder.  Right click on it and press `Open in Terminal`.  This should open a command line for you.  Now, you'll want to type in the following command:
 ```
 git clone https://github.com/bigboyconst/VBC2
 ```
@@ -28,4 +28,4 @@ Now, everything should be properly set up for you to push and pull from the repo
 
 ### MacOS / Linux
 
-For MacOS or Linx, you'll follow the same procedure, except when right clicking on the `Mods` folder, you'll want to click on `Services > New Terminal at Folder`.  Then, copy paste the same command as earlier to clone the repository and follow the same steps for GitHub desktop to be able to push and pull.
+For MacOS or Linx, you'll follow the same procedure, except when right clicking on the `Mods` folder, you'll want to click on `Services > New Terminal at Folder` (MacOS) / `Open in Terminal` (Linux).  Then, copy paste the same command as earlier to clone the repository and follow the same steps for GitHub desktop to be able to push and pull.
