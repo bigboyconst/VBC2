@@ -28,4 +28,4 @@ Now, everything should be properly set up for you to push and pull from the repo
 
 ### MacOS / Linux
 
-For MacOS or Linx, you'll follow the same procedure, except when right clicking on the `Mods` folder, you'll want to click on `New Terminal at Folder`.  Then, copy paste the same command as earlier to clone the repository and follow the same steps for GitHub desktop to be able to push and pull.
+For MacOS or Linx, you'll follow the same procedure, except when right clicking on the `Mods` folder, you'll want to click on `Services > New Terminal at Folder`.  Then, copy paste the same command as earlier to clone the repository and follow the same steps for GitHub desktop to be able to push and pull.
