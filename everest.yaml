@@ -1,0 +1,6 @@
+- Name: VBC2
+  Version: 0.1.0
+  DLL: bin/VBC2.dll
+  Dependencies:
+    - Name: EverestCore
+      Version: 1.5421.0

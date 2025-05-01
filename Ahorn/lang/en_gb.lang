@@ -1,0 +1,5 @@
+# Sample Entity
+placements.entities.VBC2/SampleEntity.tooltips.sampleProperty=A sample property for your entity.
+
+# Sample Trigger
+placements.triggers.VBC2/SampleTrigger.tooltips.sampleProperty=A sample property for your trigger.
