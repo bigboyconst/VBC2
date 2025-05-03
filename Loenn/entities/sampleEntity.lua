@@ -6,10 +6,11 @@ local sampleEntity = {
         {
             name = "normal",
             data = {
-                sampleProperty = 0,
-            },
-        },
-    },
+                oscillationAmplitude = 10.0,
+                oscillationSpeed = 1.0
+            }
+        }
+    }
 }
 
 return sampleEntity
