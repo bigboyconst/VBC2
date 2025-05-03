@@ -59,13 +59,17 @@ namespace Celeste.Mod.VBC2.Entities
 
         readonly Ease.Easer easer;
 
+        Spline spline;
+
         int StartIndex;
         int EndIndex;
 
-        public PathSpinner(EntityData data, Vector2 offset)
+        public PathSpinner(EntityData data, Vector2 offset) : base(data.Position + offset)
         {
+
             Collider = new ColliderList(new Circle(6f), new Hitbox(16f, 4f, -8f, -3f));
             Add(new PlayerCollider(OnPlayer));
+            Add(VBC2Module.Instance.PandaSpriteBank.Create("templeBlade"));
             Nodes = data.NodesWithPosition(offset);
             Speed = data.Float("speed");
             Percent = 0f;
@@ -76,7 +80,12 @@ namespace Celeste.Mod.VBC2.Entities
             ClosePath = data.Bool("closePath");
             SmoothPath = data.Bool("smoothPath");
 
-            if (!StopAtNodes)
+            if (SmoothPath)
+            {
+                spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
+            }
+
+            if (!StopAtNodes && !SmoothPath)
                 easer = Ease.Linear;
             else
             {
@@ -145,27 +154,31 @@ namespace Celeste.Mod.VBC2.Entities
             }
         }
 
+        float EasedPercent(float percent) => (NodeCount - 1) * easer(percent / (NodeCount - 1));
+
         Vector2 GetNextPosition()
         {
             Vector2 res;
             Vector2 start = Nodes[StartIndex];
             Vector2 end = Nodes[EndIndex];
             float t = IsMovingForward ? Percent - StartIndex : StartIndex - Percent;
+            float easedPercent = EasedPercent(Percent);
+            float t2 = IsMovingForward ? StartIndex + easer(t) : StartIndex - easer(t);
             if (!SmoothPath)
+            {
                 res = Vector2.Lerp(start, end, easer(t));
+            }
             else
             {
-                
+                res = StopAtNodes ? spline.Evaluate(t2) : spline.Evaluate(easedPercent);
             }
+            return res;
         }
 
         public void UpdatePosition()
         {
             UpdateEndpoints();
-            Vector2 start = Nodes[StartIndex];
-            Vector2 end = Nodes[EndIndex];
-            float t = IsMovingForward ? Percent - StartIndex : StartIndex - Percent;
-            Position = Vector2.Lerp(start, end, easer(t));
+            Position = GetNextPosition();
         }
 
 
@@ -198,12 +211,25 @@ namespace Celeste.Mod.VBC2.Entities
 
         public virtual void OnPathStart()
         {
-
+            if (SmoothPath && (spline.xSegments.Length == 0 || spline.ySegments.Length == 0))
+            {
+                spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
+            }
         }
 
         public virtual void OnPathEnd()
         {
 
+        }
+
+        public override void Render()
+        {
+            base.Render();
+        }
+
+        public override void Removed(Scene scene)
+        {
+            base.Removed(scene);
         }
     }
 }

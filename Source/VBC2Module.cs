@@ -32,7 +32,8 @@ namespace Celeste.Mod.VBC2
         /// </summary>
         public static VBC2ModuleSaveData SaveData => (VBC2ModuleSaveData) Instance._SaveData;
 
-        public SpriteBank SpriteBank;
+        public SpriteBank PandaSpriteBank;
+        public SpriteBank SampleSpriteBank;
 
         public VBC2Module() 
         {
@@ -48,12 +49,13 @@ namespace Celeste.Mod.VBC2
 
         public override void LoadContent(bool firstLoad)
         {
-            SpriteBank = new(GFX.Game, "Graphics/Sprites.xml");
+            SampleSpriteBank = new(GFX.Game, "Graphics/Sprites.xml");
+            PandaSpriteBank = new(GFX.Game, "Graphics/VBC2xmls/Panda/Sprites.xml");
         }
 
         public override void Load() {
             // TODO: apply any hooks that should always be active
-        
+            
         }
 
         public override void Unload() {

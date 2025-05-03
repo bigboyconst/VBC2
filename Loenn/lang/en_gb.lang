@@ -1,7 +1,16 @@
 # Sample Entity
 entities.VBC2/SampleEntity.placements.name.normal=Sample Entity
-entities.VBC2/SampleEntity.attributes.description.sampleProperty=A sample property for your entity.
+entities.VBC2/SampleEntity.attributes.description.oscillationAmplitude=The amplitude of the object's oscillation.
+entities.VBC2/SampleEntity.attributes.description.oscillationSpeed=The frequency of the object's oscillation.
 
 # Sample Trigger
 triggers.VBC2/SampleTrigger.placements.name.normal=Sample Trigger
 triggers.VBC2/SampleTrigger.attributes.description.sampleProperty=A sample property for your trigger.
+
+entities.VBC2/PathSpinner.placements.name.normal=Path Spinner
+entities.VBC2/PathSpinner.attributes.description.closePath=Whether the path should should close.
+entities.VBC2/PathSpinner.attributes.description.stopAtNodes=Whether to stop at each node.
+entities.VBC2/PathSpinner.attributes.description.easeMode=Whether to ease in, out, or in and out when stopping.
+entities.VBC2/PathSpinner.attributes.description.easeOption=Whether easing should be applied to every node or only to the ends.
+entities.VBC2/PathSpinner.attributes.description.speed=The speed of traversal.
+entities.VBC2/PathSpinner.attributes.description.smoothPath=Whether to smoothly interpolate between the points.
