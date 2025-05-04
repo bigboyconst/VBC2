@@ -106,7 +106,7 @@ namespace Celeste.Mod.VBC2.Utils
             float[] h = new float[n];
             for (int i = 0; i < n - 1; i++)
                 h[i] = x[i + 1] - x[i];
-            h[n - 1] = x[0] + (x[n - 1] - x[n - 2]) - x[n - 1]; // wrap
+            h[n - 1] = x[0] - x[n - 1]; // wrap
 
             float[] alpha = new float[n];
             for (int i = 1; i < n - 1; i++)

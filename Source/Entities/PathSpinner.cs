@@ -85,7 +85,7 @@ namespace Celeste.Mod.VBC2.Entities
                 spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
             }
 
-            if (!StopAtNodes && !SmoothPath)
+            if (!StopAtNodes)
                 easer = Ease.Linear;
             else
             {
@@ -170,7 +170,10 @@ namespace Celeste.Mod.VBC2.Entities
             }
             else
             {
-                res = StopAtNodes ? spline.Evaluate(t2) : spline.Evaluate(easedPercent);
+                Vector2 v = spline.Evaluate(easedPercent);
+                if (ClosePath)
+                    v = spline.Evaluate(NodeCount * easer(Percent / NodeCount));
+                res = StopAtNodes ? spline.Evaluate(t2) : v;
             }
             return res;
         }
@@ -200,9 +203,16 @@ namespace Celeste.Mod.VBC2.Entities
             if (!IsMoving)
                 return;
 
-            Percent = Calc.Approach(Percent, IsMovingForward ? NodeCount - 1 : 0, Engine.DeltaTime * Speed);
+            Percent += (IsMovingForward ? 1f : -1f) * Engine.DeltaTime * Speed;
+            if (Percent >= NodeCount)
+            {
+                StartIndex = 0;
+                EndIndex = 1;
+            }
+            Percent = MathF.Max(Percent, 0f);
+            Percent %= NodeCount;
             UpdatePosition();
-            if ((IsMovingForward && Percent == NodeCount - 1) || (!IsMovingForward && Percent == 0f))
+            if (!ClosePath && ((IsMovingForward && VBC2Math.Approximately(Percent, NodeCount - 1)) || (!IsMovingForward && VBC2Math.Approximately(Percent, 0f))))
             {
                 IsMovingForward = !IsMovingForward;
                 OnPathEnd();
