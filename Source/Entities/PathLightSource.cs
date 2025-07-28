@@ -3,52 +3,36 @@ using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 using Celeste.Mod.VBC2.Utils;
+using Celeste.Mod.DBBHelper;
+using Celeste.Mod.DBBHelper.Entities;
 
 namespace Celeste.Mod.VBC2.Entities
 {
     /// <summary>
-    /// Represents a spinner whose path is determined by a certain number of nodes.
+    /// Represents a light source that moves along a path defined by nodes.
     /// </summary>
-    [CustomEntity("VBC2/PathSpinner")]
-    public class PathSpinner : Entity
+    [CustomEntity("VBC2/PathLightSource")]
+    public class PathLightSource : InvisibleLight
     {
-        /// <summary>
-        /// Whether or not the path should be closed.  If this is false, the 
-        /// spinner will move back and forth along its path, but if this is 
-        /// true, the spinner's path will be extended to connect the last 
-        /// node to the first node.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.ClosePath"/>
         public bool ClosePath { get; set; }
 
-        /// <summary>
-        /// Whether the spinner should stop temporarily at each of the nodes on its path. If this 
-        /// is set to false, the <see cref="EaseMode"/> option will be ignored.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.StopAtNodes">
         public bool StopAtNodes { get; set; }
 
-        /// <summary>
-        /// The easing mode to be used
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.EaseMode"/>
         public EaseMode EaseMode { get; set; }
 
-        /// <summary>
-        /// The speed at which the spinner travels along its path.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.Speed"/>
         public float Speed { get; set; }
 
-        /// <summary>
-        /// Whether or not to smooth the path that the spinner takes.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.SmoothPath"/>
         public bool SmoothPath { get; set; }
 
-        /// <summary>
-        /// The value of the parameter for this track spinner.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.Percent"/>
         public float Percent { get; private set; }
 
-        /// <summary>
-        /// The number of nodes in the spinner's path.
-        /// </summary>
+        /// <inheritdoc cref="PathSpinner.NodeCount"/>
         public int NodeCount => Nodes.Length;
 
         public Vector2[] Nodes { get; private set; }
@@ -64,13 +48,10 @@ namespace Celeste.Mod.VBC2.Entities
         int StartIndex;
         int EndIndex;
 
-        public PathSpinner(EntityData data, Vector2 offset) : base(data.Position + offset)
+        public PathLightSource(EntityData data, Vector2 offset) : base(data, offset)
         {
-            Collider = new ColliderList(new Circle(6f), new Hitbox(16f, 4f, -8f, -3f));
-            Add(new PlayerCollider(OnPlayer));
-            Add(VBC2Module.Instance.PandaSpriteBank.Create("templeBlade"));
             Nodes = data.NodesWithPosition(offset);
-            Speed = data.Float("speed");
+            Speed = data.Float("movementSpeed");
             Percent = 0f;
             IsMovingForward = true;
             IsMoving = true;
@@ -80,9 +61,7 @@ namespace Celeste.Mod.VBC2.Entities
             SmoothPath = data.Bool("smoothPath");
 
             if (SmoothPath)
-            {
                 spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
-            }
 
             if (!StopAtNodes)
                 easer = Ease.Linear;
@@ -100,6 +79,8 @@ namespace Celeste.Mod.VBC2.Entities
             StartIndex = 0;
             EndIndex = 1;
         }
+
+        #region Spline Logic
 
         void UpdateEndpoints()
         {
@@ -183,11 +164,15 @@ namespace Celeste.Mod.VBC2.Entities
             Position = GetNextPosition();
         }
 
-        public virtual void OnPlayer(Player player)
+        public virtual void OnPathStart()
         {
-            if (player.Die((player.Position - Position).SafeNormalize()) != null)
-                IsMoving = false;
+            if (SmoothPath && (spline.xSegments.Length == 0 || spline.ySegments.Length == 0))
+            {
+                spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
+            }
         }
+
+        #endregion
 
         public override void Awake(Scene scene)
         {
@@ -198,9 +183,9 @@ namespace Celeste.Mod.VBC2.Entities
         public override void Update()
         {
             base.Update();
+
             if (!IsMoving)
                 return;
-
             Percent += (IsMovingForward ? 1f : -1f) * Engine.DeltaTime * Speed;
             if (Percent >= NodeCount)
             {
@@ -210,34 +195,17 @@ namespace Celeste.Mod.VBC2.Entities
             Percent = MathF.Max(Percent, 0f);
             Percent %= NodeCount;
             UpdatePosition();
-            if (!ClosePath && ((IsMovingForward && VBC2Math.Approximately(Percent, NodeCount - 1)) || (!IsMovingForward && VBC2Math.Approximately(Percent, 0f))))
+            if (!ClosePath && IsAtEndOfPath())
             {
                 IsMovingForward = !IsMovingForward;
-                OnPathEnd();
             }
         }
 
-        public virtual void OnPathStart()
-        {
-            if (SmoothPath && (spline.xSegments.Length == 0 || spline.ySegments.Length == 0))
-            {
-                spline = SplineInterpolation.Interpolate(Nodes, ClosePath ? SplineType.Closed : SplineType.Natural);
-            }
-        }
-
-        public virtual void OnPathEnd()
-        {
-
-        }
+        public bool IsAtEndOfPath() => (IsMovingForward && VBC2Math.Approximately(Percent, NodeCount - 1)) || (!IsMovingForward && VBC2Math.Approximately(Percent, 0f));
 
         public override void Render()
         {
             base.Render();
-        }
-
-        public override void Removed(Scene scene)
-        {
-            base.Removed(scene);
         }
     }
 }
