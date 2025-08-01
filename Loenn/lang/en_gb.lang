@@ -26,3 +26,9 @@ entities.VBC2/PathLightSource.attributes.description.easeMode=Whether to ease in
 entities.VBC2/PathLightSource.attributes.description.easeOption=Whether easing should be applied to every node or only to the ends.
 entities.VBC2/PathLightSource.attributes.description.movementSpeed=The speed of traversal.
 entities.VBC2/PathLightSource.attributes.description.smoothPath=Whether to smoothly interpolate between the points.
+
+entities.VBC2/CustomLightTheoCrystal.placements.name.normal=Custom Light Theo Crystal
+entities.VBC2/CustomLightTheoCrystal.attributes.description.bloomRadius=The radius of the light source.
+entities.VBC2/CustomLightTheoCrystal.attributes.description.lightColor=The color of the light.
+entities.VBC2/CustomLightTheoCrystal.attributes.description.startFade=Where to start the fade.
+entities.VBC2/CustomLightTheoCrystal.attributes.description.endFade=Where to end the fade.
