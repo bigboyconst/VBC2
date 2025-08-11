@@ -38,13 +38,13 @@ namespace Celeste.Mod.VBC2
         public VBC2Module() 
         {
             Instance = this;
-    #if DEBUG
+            #if DEBUG
             // debug builds use verbose logging
             Logger.SetLogLevel(nameof(VBC2Module), LogLevel.Verbose);
-    #else
+            #else
             // release builds use info logging to reduce spam in log files
             Logger.SetLogLevel(nameof(VBC2Module), LogLevel.Info);
-    #endif
+            #endif
         }
 
         public override void LoadContent(bool firstLoad)
