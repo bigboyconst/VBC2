@@ -5,6 +5,6 @@ namespace Celeste.Mod.VBC2
     /// </summary>
     public class VBC2ModuleSession : EverestModuleSession 
     {
-
+        
     }
 }

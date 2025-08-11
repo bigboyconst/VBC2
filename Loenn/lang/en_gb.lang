@@ -32,3 +32,8 @@ entities.VBC2/CustomLightTheoCrystal.attributes.description.bloomRadius=The radi
 entities.VBC2/CustomLightTheoCrystal.attributes.description.lightColor=The color of the light.
 entities.VBC2/CustomLightTheoCrystal.attributes.description.startFade=Where to start the fade.
 entities.VBC2/CustomLightTheoCrystal.attributes.description.endFade=Where to end the fade.
+
+entities.VBC2/SeekerSpring.placements.name.up=Seeker Spring (Up)
+entities.VBC2/SeekerSpringRight.placements.name.right=Seeker Spring (Right)
+entities.VBC2/SeekerSpringLeft.placements.name.left=Seeker Spring (Left)
+entities.VBC2/SeekerSpringDown.placements.name.down=Seeker Spring (Down)
